@@ -1,5 +1,6 @@
 flask
-python-telegram-bot==13.7
+python-telegram-bot==13.15
 Flask-BasicAuth
 gunicorn
 python-dateutil
+urllib3==1.26.20
