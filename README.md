@@ -1,9 +1,9 @@
 # Alertmanager webhook for Telegram (Python Version)
 
-![Docker Image CI](https://github.com/nopp/alertmanager-webhook-telegram-python/workflows/Docker%20Image%20CI/badge.svg)
-![Code scanning - action](https://github.com/nopp/alertmanager-webhook-telegram-python/workflows/Code%20scanning%20-%20action/badge.svg)
+![Docker Image CI](https://github.com/dikapriska/alertmanager-webhook-telegram-python/workflows/Docker%20Image%20CI/badge.svg)
+![Code scanning - action](https://github.com/dikapriska/alertmanager-webhook-telegram-python/workflows/Code%20scanning%20-%20action/badge.svg)
 
-GO Version (https://github.com/nopp/alertmanager-webhook-telegram-go)
+GO Version (https://github.com/dikapriska/alertmanager-webhook-telegram-go)
 
 Python version 3
 
@@ -15,11 +15,19 @@ Change on flaskAlert.py
 =======================
 * botToken
 * chatID
+* message_thread_id (optional, for forum/topic within group)
 
 If you'll use with authentication, change too
 
 * XXXUSERNAME
 * XXXPASSWORD
+
+Forum/Topic Setup
+=================
+To send alerts to a specific forum/topic within a group:
+1. Get the forum/topic ID from your Telegram group
+2. Change `message_thread_id = None` to `message_thread_id = 12345` (replace 12345 with your topic ID)
+3. Keep `message_thread_id = None` to send to the default group
 
 Disabling authentication
 ========================
@@ -47,6 +55,78 @@ One way to get the chat ID
 Running
 =======
 * python flaskAlert.py
+
+Installation Using Virtual Environment (venv)
+==============================================
+1. Create virtual environment:
+   ```bash
+   python3 -m venv venv
+   ```
+
+2. Activate virtual environment:
+   - macOS/Linux:
+     ```bash
+     source venv/bin/activate
+     ```
+   - Windows:
+     ```cmd
+     venv\Scripts\activate
+     ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Run the application:
+   ```bash
+   python flaskAlert.py
+   ```
+
+
+Systemd Service Setup
+=====================
+1. Create service file:
+   ```bash
+   sudo nano /etc/systemd/system/webhook-telegram.service
+   ```
+
+2. Fill with the following configuration (adjust paths according to your project location):
+   ```ini
+   [Unit]
+   Description=Alertmanager Telegram Webhook
+   After=network.target
+
+   [Service]
+   Type=simple
+   User=root
+   Group=root
+   WorkingDirectory=/opt/webhook-telegram
+   ExecStart=/opt/webhook-telegram/venv/bin/python /opt/webhook-telegram/flaskAlert.py
+   Restart=always
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+3. Save and close the file (Ctrl+X, then Y, then Enter)
+
+4. Reload systemd and start the service:
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable webhook-telegram
+   sudo systemctl start webhook-telegram
+   ```
+
+5. Check service status:
+   ```bash
+   sudo systemctl status webhook-telegram
+   ```
+
+6. View logs:
+   ```bash
+   sudo journalctl -u webhook-telegram -f
+   ```
 
 Running on docker
 =================

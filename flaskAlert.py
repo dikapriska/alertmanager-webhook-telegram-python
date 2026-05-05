@@ -1,4 +1,6 @@
 import telegram, json, logging
+from time import sleep
+from telegram.error import RetryAfter, TimedOut, NetworkError
 from dateutil import parser
 from flask import Flask
 from flask import request
@@ -10,6 +12,9 @@ basic_auth = BasicAuth(app)
 
 # Yes need to have -, change it!
 chatID = "-xchatIDx"
+
+# Forum/Topic ID (optional, set to None if not using)
+message_thread_id = None  # Contoh: 12345
 
 # Authentication conf, change it!
 app.config['BASIC_AUTH_FORCE'] = True
@@ -42,22 +47,39 @@ def postAlertmanager():
             elif alert['status'] == "firing":
                 correctDate = parser.parse(alert['startsAt']).strftime('%Y-%m-%d %H:%M:%S')
                 message += "Started: "+correctDate
-            bot.sendMessage(chat_id=chatID, text=message)
-            return "Alert OK", 200
+            # Kirim pesan dengan atau tanpa message_thread_id
+            if message_thread_id:
+                bot.sendMessage(chat_id=chatID, text=message, message_thread_id=message_thread_id)
+            else:
+                bot.sendMessage(chat_id=chatID, text=message)
+        return "Alert OK", 200
     except RetryAfter:
         sleep(30)
-        bot.sendMessage(chat_id=chatID, text=message)
+        if message_thread_id:
+            bot.sendMessage(chat_id=chatID, text=message, message_thread_id=message_thread_id)
+        else:
+            bot.sendMessage(chat_id=chatID, text=message)
         return "Alert OK", 200
     except TimedOut as e:
         sleep(60)
-        bot.sendMessage(chat_id=chatID, text=message)
+        if message_thread_id:
+            bot.sendMessage(chat_id=chatID, text=message, message_thread_id=message_thread_id)
+        else:
+            bot.sendMessage(chat_id=chatID, text=message)
         return "Alert OK", 200
     except NetworkError as e:
         sleep(60)
-        bot.sendMessage(chat_id=chatID, text=message)
+        if message_thread_id:
+            bot.sendMessage(chat_id=chatID, text=message, message_thread_id=message_thread_id)
+        else:
+            bot.sendMessage(chat_id=chatID, text=message)
         return "Alert OK", 200
     except Exception as error:       
-        bot.sendMessage(chat_id=chatID, text="Error: "+str(error))
+        error_msg = "Error: "+str(error)
+        if message_thread_id:
+            bot.sendMessage(chat_id=chatID, text=error_msg, message_thread_id=message_thread_id)
+        else:
+            bot.sendMessage(chat_id=chatID, text=error_msg)
         app.logger.info("\t%s",error)
         return "Alert fail", 200
 
