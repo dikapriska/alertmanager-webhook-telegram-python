@@ -4,3 +4,4 @@ Flask-BasicAuth
 gunicorn
 python-dateutil
 urllib3==1.26.20
+python-dotenv

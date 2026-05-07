@@ -11,27 +11,32 @@ Python version 3
 
 * pip install -r requirements.txt
 
-Change on flaskAlert.py
-=======================
-* botToken
-* chatID
-* message_thread_id (optional, for forum/topic within group)
+Configuration with .env File
+=============================
+1. Copy the `.env.example` file to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
 
-If you'll use with authentication, change too
-
-* XXXUSERNAME
-* XXXPASSWORD
+2. Edit the `.env` file and update the following variables:
+   - `FLASK_SECRET_KEY`: Secret key for Flask application
+   - `TELEGRAM_CHAT_ID`: Telegram chat ID (required, include the - prefix)
+   - `TELEGRAM_MESSAGE_THREAD_ID`: Forum/Topic ID (optional, leave empty or remove if not using)
+   - `BASIC_AUTH_FORCE`: Set to `True` to enable basic authentication, `False` to disable
+   - `BASIC_AUTH_USERNAME`: Username for basic authentication
+   - `BASIC_AUTH_PASSWORD`: Password for basic authentication
+   - `TELEGRAM_BOT_TOKEN`: Telegram bot token
 
 Forum/Topic Setup
 =================
 To send alerts to a specific forum/topic within a group:
 1. Get the forum/topic ID from your Telegram group
-2. Change `message_thread_id = None` to `message_thread_id = 12345` (replace 12345 with your topic ID)
-3. Keep `message_thread_id = None` to send to the default group
+2. Set `TELEGRAM_MESSAGE_THREAD_ID=12345` in your .env file (replace 12345 with your topic ID)
+3. Leave `TELEGRAM_MESSAGE_THREAD_ID` empty or remove it to send to the default group
 
 Disabling authentication
 ========================
-On flaskAlert.py change app.config['BASIC_AUTH_FORCE'] = True to app.config['BASIC_AUTH_FORCE'] = False
+Set `BASIC_AUTH_FORCE=False` in your .env file
 
 Alertmanager configuration example
 ==================================

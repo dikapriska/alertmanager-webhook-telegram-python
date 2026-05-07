@@ -1,28 +1,27 @@
-import telegram, json, logging
+import telegram, json, logging, os
 from time import sleep
 from telegram.error import RetryAfter, TimedOut, NetworkError
 from dateutil import parser
 from flask import Flask
 from flask import request
 from flask_basicauth import BasicAuth
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'changeKeyHeere'
+app.secret_key = os.getenv('FLASK_SECRET_KEY')
 basic_auth = BasicAuth(app)
 
-# Yes need to have -, change it!
-chatID = "-xchatIDx"
+chatID = os.getenv('TELEGRAM_CHAT_ID')
 
-# Forum/Topic ID (optional, set to None if not using)
-message_thread_id = None  # Contoh: 12345
+message_thread_id = os.getenv('TELEGRAM_MESSAGE_THREAD_ID') or None
 
-# Authentication conf, change it!
-app.config['BASIC_AUTH_FORCE'] = True
-app.config['BASIC_AUTH_USERNAME'] = 'XXXUSERNAME'
-app.config['BASIC_AUTH_PASSWORD'] = 'XXXPASSWORD'
+app.config['BASIC_AUTH_FORCE'] = os.getenv('BASIC_AUTH_FORCE')
+app.config['BASIC_AUTH_USERNAME'] = os.getenv('BASIC_AUTH_USERNAME')
+app.config['BASIC_AUTH_PASSWORD'] = os.getenv('BASIC_AUTH_PASSWORD')
 
-# Bot token, change it!
-bot = telegram.Bot(token="botToken")
+bot = telegram.Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
 
 @app.route('/alert', methods = ['POST'])
 def postAlertmanager():
@@ -47,7 +46,6 @@ def postAlertmanager():
             elif alert['status'] == "firing":
                 correctDate = parser.parse(alert['startsAt']).strftime('%Y-%m-%d %H:%M:%S')
                 message += "Started: "+correctDate
-            # Kirim pesan dengan atau tanpa message_thread_id
             if message_thread_id:
                 bot.sendMessage(chat_id=chatID, text=message, message_thread_id=message_thread_id)
             else:
