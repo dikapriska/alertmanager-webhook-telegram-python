@@ -7,10 +7,6 @@ GO Version (https://github.com/dikapriska/alertmanager-webhook-telegram-go)
 
 Python version 3
 
-## INSTALL
-
-* pip install -r requirements.txt
-
 Configuration with .env File
 =============================
 1. Copy the `.env.example` file to `.env`:
@@ -56,10 +52,6 @@ One way to get the chat ID
 1) Access https://web.telegram.org/
 2) Click to specific chat to the left
 3) At the url, you can get the chat ID(Ex: https://web.telegram.org/#/im?p=g1234567, so the chatID is 1234567)
-
-Running
-=======
-* python flaskAlert.py
 
 Installation Using Virtual Environment (venv)
 ==============================================
