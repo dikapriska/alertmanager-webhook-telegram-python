@@ -125,18 +125,27 @@ Systemd Service Setup
    sudo journalctl -u webhook-telegram -f
    ```
 
-Running on docker
+Running on Docker
 =================
-    git clone https://github.com/nopp/alertmanager-webhook-telegram.git
-    cd alertmanager-webhook-telegram/docker/
-    docker build -t alertmanager-webhook-telegram:1.0 .
+1. Clone the repository and build the image:
+    ```bash
+    git clone https://github.com/dikapriska/alertmanager-webhook-telegram-python.git
+    cd alertmanager-webhook-telegram-python
+    docker build -t alertmanager-webhook-telegram:latest .
+    ```
 
+2. Run the container with environment variables (new naming convention):
+    ```bash
     docker run -d --name telegram-bot \
-    	-e "bottoken=telegramBotToken" \
-    	-e "chatid=telegramChatID" \
-    	-e "username=<username>" \
-    	-e "password=<password>" \
-    	-p 9119:9119 alertmanager-webhook-telegram:1.0
+        -e "TELEGRAM_BOT_TOKEN=telegramBotToken" \
+        -e "TELEGRAM_CHAT_ID=telegramChatID" \
+        -e "TELEGRAM_MESSAGE_THREAD_ID=12345" \
+        -e "BASIC_AUTH_FORCE=True" \
+        -e "BASIC_AUTH_USERNAME=<username>" \
+        -e "BASIC_AUTH_PASSWORD=<password>" \
+        -e "FLASK_SECRET_KEY=your-secret-key" \
+        -p 9119:9119 alertmanager-webhook-telegram:latest
+    ```
 
 Example to test
 ===============

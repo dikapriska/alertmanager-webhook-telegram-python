@@ -1,0 +1,23 @@
+# Environment files
+.env.*
+.env
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Logs
+*.log
+logs
+
+# Documentation
+docs/
+*.md
+
+# Github
+.github/
