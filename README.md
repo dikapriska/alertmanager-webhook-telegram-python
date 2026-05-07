@@ -3,7 +3,7 @@
 ![Docker Image CI](https://github.com/dikapriska/alertmanager-webhook-telegram-python/workflows/Docker%20Image%20CI/badge.svg)
 ![Code scanning - action](https://github.com/dikapriska/alertmanager-webhook-telegram-python/workflows/Code%20scanning%20-%20action/badge.svg)
 
-GO Version (https://github.com/dikapriska/alertmanager-webhook-telegram-go)
+GO Version [Alertmanager Webhook Telegram](https://github.com/dikapriska/alertmanager-webhook-telegram-go)
 
 Python version 3
 
