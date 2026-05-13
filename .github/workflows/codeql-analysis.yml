@@ -10,6 +10,8 @@ jobs:
   CodeQL-Build:
 
     runs-on: ubuntu-latest
+    permissions:
+      security-events: read
 
     steps:
     - name: Checkout repository
